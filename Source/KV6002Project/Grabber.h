@@ -10,6 +10,7 @@
 #include "GameFramework/PlayerController.h"
 #include "Engine/World.h"
 #include "HideFunction.h"
+#include "Loot.h"
 #include "Grabber.generated.h"
 
 
@@ -22,10 +23,12 @@ public:
 	// Sets default values for this component's properties
 	UGrabber();
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	void Check();
 	void Grab();
-	void Release();
 	void Update();
 	UHideFunction* Hider;
+	ULoot* Loot;
+	int Score;
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -33,10 +36,9 @@ protected:
 private:
 	float Reach = 120.f;
 	float FrameTime;
-	UPhysicsHandleComponent* PhysicsHandle = nullptr;
 	UInputComponent* InputHandler = nullptr;
-	void CheckPhysicsHandle();
 	void SetupInputComponent();
+	void TrackSight(float);
 	AActor* HitActor;
 	
 };

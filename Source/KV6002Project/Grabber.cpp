@@ -18,7 +18,6 @@ UGrabber::UGrabber()
 void UGrabber::BeginPlay()
 {
 	Super::BeginPlay();
-	CheckPhysicsHandle();
 	SetupInputComponent();
 }
 
@@ -27,6 +26,12 @@ void UGrabber::BeginPlay()
 void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	TrackSight(DeltaTime);
+	Score = 0;
+}
+
+void UGrabber::TrackSight(float DeltaTime)
+{
 	FrameTime = DeltaTime;
 	FVector PlayerViewPointLocation;
 	FRotator PlayerViewPointRotation;
@@ -44,51 +49,42 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 	HitActor = Hit.GetActor();
 }
 
-void UGrabber::Grab()
+void UGrabber::Check()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Grab key has been pressed"));
 	if(HitActor){
 		Hider = HitActor->FindComponentByClass<UHideFunction>();
-		UE_LOG(LogTemp, Error, TEXT("Hit a thing"));
 	}
 	if(Hider)
 	{
-		UE_LOG(LogTemp, Error, TEXT("You've only gone and bloddy did it"));
-		Hider->Hide(FrameTime);
+		Hider->Open(FrameTime);
+	}
+}
+
+void UGrabber::Grab()
+{
+	if(HitActor)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Actor has been hit"));
+		Loot = HitActor->FindComponentByClass<ULoot>();
+	}
+	if(Loot)
+	{
+		Loot->Loot();
 	}
 	else
 	{
-		UE_LOG(LogTemp, Error, TEXT("Didnt bloody work"));
+		UE_LOG(LogTemp, Warning, TEXT("No Loot Component Found"));
 	}
+	
 }
 
-void UGrabber::Release()
-{
-	UE_LOG(LogTemp, Warning, TEXT("Grab key has been released"));
-}
-
-
-
-void UGrabber::CheckPhysicsHandle()
-{
-	PhysicsHandle = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
-	if(PhysicsHandle)
-	{
-
-	}
-	else
-	{
-		UE_LOG(LogTemp, Error, TEXT("Object %s has no Physics Handle Component attached, please attach in order to run the game"), *GetOwner()->GetName())
-	}
-}
 
 void UGrabber::SetupInputComponent()
 {
 	InputHandler = GetOwner()->FindComponentByClass<UInputComponent>();
 	if(InputHandler)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Grabber has detected the input component on %s"), *GetOwner()->GetName());
-		InputHandler->BindAction("Hide", IE_Pressed, this, &UGrabber::Grab);
-		InputHandler->BindAction("Hide", IE_Released, this, &UGrabber::Release);
+		InputHandler->BindAction("Hide", IE_Pressed, this, &UGrabber::Check);
+		InputHandler->BindAction("Grab", IE_Pressed, this, &UGrabber::Grab);
 	}
 }

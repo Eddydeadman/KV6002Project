@@ -22,7 +22,8 @@ public:
 	TArray<UBoxComponent*> ListOfBoxes;
 	UPROPERTY(EditAnywhere)
 	UStaticMesh* MeshTarget;
-	void Hide(float DeltaTime);
+	void Open(float DeltaTime);
+	void Hide();
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -46,6 +47,13 @@ private:
 	float NewY;
 	float NewZ;
 	float CloseSpeed = 2.0f;
+	UPROPERTY(EditAnywhere)
+	FString TypeOfObject;
+	UPROPERTY(EDITANYWHERE)
+	FVector CameraLocation;
+
+	UPROPERTY(EditAnywhere)
+	bool CanHide;
 
 	UPROPERTY(EditAnywhere)
 	float TranslatorX;

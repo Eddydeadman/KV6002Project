@@ -29,12 +29,6 @@ void UHideFunction::BeginPlay()
 void UHideFunction::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	if(CollisionBox->IsOverlappingActor(ActorThatOpens) && InUse == false)
-	{
-		//Hide(DeltaTime);
-		InUse=true;
-	}
-
 }
 
 void UHideFunction::InitialiseObject()
@@ -53,13 +47,11 @@ void UHideFunction::InitialiseObject()
 	for(int i = 0;i<ListOfMeshes.Num();i++)
 	{
 		FString MeshName = ListOfMeshes[i]->GetName();
-		UE_LOG(LogTemp, Warning, TEXT("List of meshes include: %s"), *(MeshName));
 	}
 
 	for(int i = 0;i<ListOfBoxes.Num();i++)
 	{
 		FString SceneName = ListOfBoxes[i]->GetName();
-		UE_LOG(LogTemp, Warning, TEXT("List of meshes include: %s"), *(SceneName));
 		if(SceneName==FString("Box"))
 		{
 			CollisionBox=ListOfBoxes[i];
@@ -67,32 +59,49 @@ void UHideFunction::InitialiseObject()
 	}
 }
 
-void UHideFunction::Hide(float DeltaTime)
+void UHideFunction::Open(float DeltaTime)
 {
 	if(MeshTarget&&ListOfMeshes[0])
 	{
 		FString name = MeshTarget->GetName();
-		for(int i = 0;i<2;i++)
+		for(int i = 0;i<ListOfMeshes.Num();i++)
 		{
 			name = ListOfMeshes[i]->GetStaticMesh()->GetName();
 			FString ComparisonName = MeshTarget->GetName();
 			if(name==ComparisonName)
 			{
-				UE_LOG(LogTemp,Warning, TEXT("This has attached %s"), *name);
 				InitialLocation = ListOfMeshes[i]->GetRelativeLocation();
-				NewX = InitialLocation.X + TranslatorX;
-				NewY = InitialLocation.Y + TranslatorY;
-				NewZ = InitialLocation.Z + TranslatorZ;
-				FVector TargetLocation(NewX, NewY, NewZ);;
-				UE_LOG(LogTemp,Warning, TEXT("Location of mesh is : %f, %f, %f"), NewX, NewY, NewZ);
-	
-				ListOfMeshes[i]->SetRelativeLocation(TargetLocation);
+				if(InUse==false)
+				{
+					NewX = InitialLocation.X + TranslatorX;
+					NewY = InitialLocation.Y + TranslatorY;
+					NewZ = InitialLocation.Z + TranslatorZ;
+					FVector TargetLocation(NewX, NewY, NewZ);;
+					ListOfMeshes[i]->SetRelativeLocation(TargetLocation);
+					InUse = true;
+					if(CanHide)
+					{
+						Hide();
+					}
+					return;
+				}
+				else
+				{
+					NewX = InitialLocation.X - TranslatorX;
+					NewY = InitialLocation.Y - TranslatorY;
+					NewZ = InitialLocation.Z - TranslatorZ;
+					FVector TargetLocation(NewX, NewY, NewZ);;
+					ListOfMeshes[i]->SetRelativeLocation(TargetLocation);
+					InUse = false;
+					return;
+				}
+				
 			}
 		}
 	} 
 }
-/*if(CollisionBox->IsOverlappingActor(ActorThatOpens))
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Player Overlapping"));
-	}
-	*/
+
+void UHideFunction::Hide()
+{
+	//Code for detaching and moving it to world location vector set individually in editor
+}
