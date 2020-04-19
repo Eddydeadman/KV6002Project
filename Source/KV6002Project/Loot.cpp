@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Author - Nathan Jackson Student Number:16012679
 
 
 #include "Loot.h"
@@ -10,7 +10,6 @@ ULoot::ULoot()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
-	// ...
 }
 
 
@@ -18,8 +17,6 @@ ULoot::ULoot()
 void ULoot::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// ...
 	
 }
 
@@ -29,12 +26,11 @@ void ULoot::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentT
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
 }
 
+// Destroys the object it is attached to
 void ULoot::Loot()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Loot has been called"));
 	GetOwner()->Destroy();
 }
 

@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Author - Nathan Jackson Student Number:16012679
 
 
 #include "Grabber.h"
@@ -30,6 +30,8 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 	Score = 0;
 }
 
+// Gets the player view point location and rotation and uses the reach to get a start and end point
+// for the line trace and then, if the object hit is a physics actor, registers the hit target
 void UGrabber::TrackSight(float DeltaTime)
 {
 	FrameTime = DeltaTime;
@@ -49,6 +51,8 @@ void UGrabber::TrackSight(float DeltaTime)
 	HitActor = Hit.GetActor();
 }
 
+// When button assigned as "Check" is pressed, checks to see if the hit object has a 
+// hide function attached, and if so, calls the open function of that component
 void UGrabber::Check()
 {
 	if(HitActor){
@@ -60,6 +64,9 @@ void UGrabber::Check()
 	}
 }
 
+
+// When the grab button is pressed, checks if the hit object has a loot component attached
+// and calls the loot function if it does
 void UGrabber::Grab()
 {
 	if(HitActor)
@@ -79,12 +86,4 @@ void UGrabber::Grab()
 }
 
 
-void UGrabber::SetupInputComponent()
-{
-	InputHandler = GetOwner()->FindComponentByClass<UInputComponent>();
-	if(InputHandler)
-	{
-		InputHandler->BindAction("Hide", IE_Pressed, this, &UGrabber::Check);
-		InputHandler->BindAction("Grab", IE_Pressed, this, &UGrabber::Grab);
-	}
-}
+

@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Author - Nathan Jackson Student Number:16012679
 
 #pragma once
 
@@ -6,7 +6,10 @@
 #include "Components/ActorComponent.h"
 #include "Loot.generated.h"
 
-
+/*
+	A simple component that is added to the loot objects and has one simple
+	method to destroy the actor when it is grabbed
+*/
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class KV6002PROJECT_API ULoot : public UActorComponent
 {
@@ -15,6 +18,8 @@ class KV6002PROJECT_API ULoot : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	ULoot();
+
+	// Destroys the object it is attached to
 	void Loot();
 
 protected:
