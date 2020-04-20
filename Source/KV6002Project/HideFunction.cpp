@@ -18,7 +18,8 @@ void UHideFunction::BeginPlay()
 	Super::BeginPlay();
 	ActorThatOpens = GetWorld()->GetFirstPlayerController()->GetPawn();
 	InitialiseObject();
-	
+	Camera = ActorThatOpens->FindComponentByClass<UCameraComponent>();
+	PlayerControls = ActorThatOpens->FindComponentByClass<UInputComponent>();
 	
 }
 
@@ -62,10 +63,9 @@ void UHideFunction::Open(float DeltaTime)
 					InUse = true;
 					if(CanHide)
 					{
-						Hide();
+						//Hide(CameraLocation);
 					}
 					return;
-					UE_LOG(LogTemp, Warning, TEXT("Movement has happened"));
 				}
 				else
 				{
@@ -86,7 +86,13 @@ void UHideFunction::Open(float DeltaTime)
 	// The hide function is called at the end of the open function if the boolean "CanHide" is set to true
 	// it detaches the camera from the player and moves it to the CameraLocation vector which is set for each 
 	// instance to make it accurate as desired
-void UHideFunction::Hide()
+void UHideFunction::Hide(FVector NewLocation)
 {
-	//Code for detaching and moving it to world location vector set individually in editor
+	if(InUse == true)
+	{
+		Camera->SetWorldLocation(NewLocation);
+		HiddenControls = PlayerControls;
+		HiddenControls->ClearActionBindings();
+
+	}
 }

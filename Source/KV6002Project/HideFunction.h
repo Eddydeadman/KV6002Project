@@ -6,6 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "Components/BoxComponent.h"
 #include "Components/InputComponent.h"
+#include "Camera/CameraComponent.h"
 #include "DrawDebugHelpers.h"
 #include "HideFunction.generated.h"  
  
@@ -36,8 +37,8 @@ public:
 
 	// The hide function is called at the end of the open function if the boolean "CanHide" is set to true
 	// it detaches the camera from the player and moves it to the CameraLocation vector which is set for each 
-	// instance to make it accurate as desired
-	void Hide();
+	// instance to make it accurate as desired @param New location for the camera
+	void Hide(FVector NewLocation);
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -90,5 +91,12 @@ private:
 	// A boolean that is set when the object is currently open/hidden inside
 	bool InUse;
 
-		
+	// Camera pointer to be assigned to the player camera on startup
+	UCameraComponent* Camera;
+
+	// Input component pointer to hold the default values of the player
+	UInputComponent* PlayerControls = nullptr;
+
+	// Input component to be altered when hiding
+	UInputComponent* HiddenControls = nullptr;	
 };
