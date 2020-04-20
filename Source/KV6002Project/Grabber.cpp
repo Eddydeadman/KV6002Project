@@ -76,7 +76,7 @@ void UGrabber::Grab()
 	}
 	if(Loot)
 	{
-		Loot->Loot();
+		Score = Score + Loot->Loot();
 	}
 	
 }
@@ -90,6 +90,11 @@ void UGrabber::SetupInputComponent()
 		InputHandler->BindAction("Grab", IE_Pressed, this, &UGrabber::Grab);
 		InputHandler->BindAction("Check", IE_Pressed, this, &UGrabber::Check);
 	}
+}
+
+int UGrabber::GetScore()
+{
+	return Score;
 }
 
 

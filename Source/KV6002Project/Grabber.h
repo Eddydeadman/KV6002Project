@@ -43,7 +43,10 @@ public:
 	// is a assigned as a pointer to that component
 	ULoot* Loot;
 	// Score counter for the player
+	UPROPERTY(BlueprintReadOnly)
 	int Score;
+
+	int GetScore();
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;

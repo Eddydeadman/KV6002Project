@@ -39,6 +39,11 @@ public:
 	// it detaches the camera from the player and moves it to the CameraLocation vector which is set for each 
 	// instance to make it accurate as desired @param New location for the camera
 	void Hide(FVector NewLocation);
+
+	bool GetInUse();
+	
+	UPROPERTY(BlueprintReadOnly)
+	bool InUse;
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -89,7 +94,7 @@ private:
 	float TranslatorZ;
 
 	// A boolean that is set when the object is currently open/hidden inside
-	bool InUse;
+	
 
 	// Camera pointer to be assigned to the player camera on startup
 	UCameraComponent* Camera;

@@ -20,7 +20,8 @@ public:
 	ULoot();
 
 	// Destroys the object it is attached to
-	void Loot();
+	int Loot();
+	float Score = 1;
 
 protected:
 	// Called when the game starts
@@ -29,6 +30,10 @@ protected:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+private:
+	UPROPERTY(EditAnywhere)
+	AActor* Player;
 
 		
 };

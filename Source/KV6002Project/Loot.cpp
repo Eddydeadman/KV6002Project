@@ -17,6 +17,7 @@ ULoot::ULoot()
 void ULoot::BeginPlay()
 {
 	Super::BeginPlay();
+	Player = GetWorld()->GetFirstPlayerController()->GetPawn();
 	
 }
 
@@ -29,8 +30,9 @@ void ULoot::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentT
 }
 
 // Destroys the object it is attached to
-void ULoot::Loot()
+int ULoot::Loot()
 {
 	GetOwner()->Destroy();
+	return Score;
 }
 

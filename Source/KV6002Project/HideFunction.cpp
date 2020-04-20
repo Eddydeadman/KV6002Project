@@ -96,3 +96,9 @@ void UHideFunction::Hide(FVector NewLocation)
 
 	}
 }
+
+
+bool UHideFunction::GetInUse()
+{
+	return InUse;
+}
