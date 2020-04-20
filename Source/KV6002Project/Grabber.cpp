@@ -57,12 +57,10 @@ void UGrabber::Check()
 {
 	if(HitActor){
 		Hider = HitActor->FindComponentByClass<UHideFunction>();
-		UE_LOG(LogTemp, Warning, TEXT("Actor has been hit"));
 	}
 	if(Hider)
 	{
 		Hider->Open(FrameTime);
-		UE_LOG(LogTemp, Warning, TEXT("Hider component"));
 	}
 }
 
@@ -80,10 +78,6 @@ void UGrabber::Grab()
 	{
 		Loot->Loot();
 	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("No Loot Component Found"));
-	}
 	
 }
 
@@ -93,7 +87,6 @@ void UGrabber::SetupInputComponent()
 	InputHandler = GetOwner()->FindComponentByClass<UInputComponent>();
 	if(InputHandler)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Grabber has detected the input component on %s"), *GetOwner()->GetName());
 		InputHandler->BindAction("Grab", IE_Pressed, this, &UGrabber::Grab);
 		InputHandler->BindAction("Check", IE_Pressed, this, &UGrabber::Check);
 	}
