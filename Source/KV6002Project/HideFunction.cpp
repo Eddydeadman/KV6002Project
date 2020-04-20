@@ -65,6 +65,7 @@ void UHideFunction::Open(float DeltaTime)
 						Hide();
 					}
 					return;
+					UE_LOG(LogTemp, Warning, TEXT("Movement has happened"));
 				}
 				else
 				{

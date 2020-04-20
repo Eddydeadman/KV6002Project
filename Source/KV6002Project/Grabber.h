@@ -61,5 +61,11 @@ private:
 
 	// A pointer to an actor, used to register the line traces' hit result
 	AActor* HitActor;
+
+	// Input Component used to get the input from the player character
+	UInputComponent* InputHandler = nullptr;
+
+	// Gets the key binds from the project settings and assigns them to call methods when pressed
+	void SetupInputComponent();
 	
 };
