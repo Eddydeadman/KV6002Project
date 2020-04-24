@@ -63,7 +63,7 @@ void UHideFunction::Open(float DeltaTime)
 					InUse = true;
 					if(CanHide)
 					{
-						//Hide(CameraLocation);
+						Hide(CameraLocation);
 					}
 					return;
 				}
@@ -91,8 +91,10 @@ void UHideFunction::Hide(FVector NewLocation)
 	if(InUse == true)
 	{
 		Camera->SetWorldLocation(NewLocation);
-		HiddenControls = PlayerControls;
-		HiddenControls->ClearActionBindings();
+		ActorThatOpens->SetActorHiddenInGame(true);
+		APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
+		ActorThatOpens->DisableInput(PlayerController);
+
 
 	}
 }
