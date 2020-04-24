@@ -9,7 +9,6 @@
 #include "DrawDebugHelpers.h"
 #include "GameFramework/PlayerController.h"
 #include "Engine/World.h"
-#include "HideFunction.h"
 #include "Loot.h"
 #include "Grabber.generated.h"
 
@@ -38,7 +37,7 @@ public:
 
 	// Hide function pointer used  when identifying whether the targeted object has a hide function component and 
 	// is a assigned as a pointer to that component
-	UHideFunction* Hider;
+	class UHideFunction* Hider;
 	// Loot component pointer used  when identifying whether the targeted object has a loot component and 
 	// is a assigned as a pointer to that component
 	ULoot* Loot;
@@ -47,6 +46,8 @@ public:
 	int Score;
 
 	int GetScore();
+	
+	void Escape();
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -70,5 +71,7 @@ private:
 
 	// Gets the key binds from the project settings and assigns them to call methods when pressed
 	void SetupInputComponent();
+
+	
 	
 };

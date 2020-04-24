@@ -1,6 +1,6 @@
 // Author - Nathan Jackson Student Number:16012679
 
-
+#include "HideFunction.h"
 #include "Grabber.h"
 
 #define OUT
@@ -95,6 +95,17 @@ void UGrabber::SetupInputComponent()
 int UGrabber::GetScore()
 {
 	return Score;
+}
+
+void UGrabber::Escape()
+{
+	if(HitActor){
+		Hider = HitActor->FindComponentByClass<UHideFunction>();
+	}
+	if(Hider)
+	{
+		Hider->Escape();
+	}
 }
 
 

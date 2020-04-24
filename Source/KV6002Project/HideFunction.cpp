@@ -19,7 +19,6 @@ void UHideFunction::BeginPlay()
 	ActorThatOpens = GetWorld()->GetFirstPlayerController()->GetPawn();
 	InitialiseObject();
 	Camera = ActorThatOpens->FindComponentByClass<UCameraComponent>();
-	PlayerControls = ActorThatOpens->FindComponentByClass<UInputComponent>();
 	
 }
 
@@ -90,17 +89,33 @@ void UHideFunction::Hide(FVector NewLocation)
 {
 	if(InUse == true)
 	{
+		StorePlayerRotation = Camera->GetRelativeRotation();
+		StorePlayerLocation = Camera->GetRelativeLocation();
 		Camera->SetWorldLocation(NewLocation);
 		ActorThatOpens->SetActorHiddenInGame(true);
-		APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
+		PlayerController = GetWorld()->GetFirstPlayerController();
 		ActorThatOpens->DisableInput(PlayerController);
 
 
 	}
 }
 
+void UHideFunction::Escape()
+{
+	if(InUse == true)
+	{
+		Camera->SetRelativeRotation(StorePlayerRotation);
+		Camera->SetWorldLocation(StorePlayerLocation);
+		ActorThatOpens->SetActorHiddenInGame(false);
+		ActorThatOpens->DisableInput(HiddenController);
+		ActorThatOpens->EnableInput(PlayerController);
+
+
+	}
+}
 
 bool UHideFunction::GetInUse()
 {
 	return InUse;
 }
+

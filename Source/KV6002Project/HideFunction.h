@@ -8,6 +8,7 @@
 #include "Components/InputComponent.h"
 #include "Camera/CameraComponent.h"
 #include "DrawDebugHelpers.h"
+#include "HiddenPlayerController.h"
 #include "HideFunction.generated.h"  
  
 /*
@@ -27,9 +28,13 @@ public:
 	// An array to hold the list of static meshes that are attached to the object
 	TArray<UStaticMeshComponent*> ListOfMeshes;
 	// A static mesh variable that can be set anywhere in order to be useable for different 
-	// objects, is used to determine what mesh is to be moved when opening or closing
+	// objects, is used to determine what mesh is to be moved when opening or closing	
 	UPROPERTY(EditAnywhere)
 	UStaticMesh* MeshTarget;
+	
+	// Called every frame
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
 
 	// The open function checks to see if this object has the target mesh in the array and uses the
 	// translator floats to set a new world location. Uses a bool to decide whether to open or close
@@ -44,13 +49,12 @@ public:
 	
 	UPROPERTY(BlueprintReadOnly)
 	bool InUse;
+
+	void Escape();
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 private:
 	// Initalising the object involves setting the actor that opens as the player character to be used with the hide function
@@ -98,10 +102,12 @@ private:
 
 	// Camera pointer to be assigned to the player camera on startup
 	UCameraComponent* Camera;
+	
+	FRotator StorePlayerRotation;
 
-	// Input component pointer to hold the default values of the player
-	UInputComponent* PlayerControls = nullptr;
+	FVector StorePlayerLocation;
 
-	// Input component to be altered when hiding
-	UInputComponent* HiddenControls = nullptr;	
+	APlayerController* PlayerController;
+
+	AHiddenPlayerController* HiddenController;
 };
