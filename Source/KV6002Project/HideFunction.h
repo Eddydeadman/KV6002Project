@@ -7,8 +7,8 @@
 #include "Components/BoxComponent.h"
 #include "Components/InputComponent.h"
 #include "Camera/CameraComponent.h"
+#include "TimerManager.h"
 #include "DrawDebugHelpers.h"
-#include "HiddenPlayerController.h"
 #include "HideFunction.generated.h"  
  
 /*
@@ -27,6 +27,7 @@ public:
 	UHideFunction();
 	// An array to hold the list of static meshes that are attached to the object
 	TArray<UStaticMeshComponent*> ListOfMeshes;
+
 	// A static mesh variable that can be set anywhere in order to be useable for different 
 	// objects, is used to determine what mesh is to be moved when opening or closing	
 	UPROPERTY(EditAnywhere)
@@ -38,18 +39,23 @@ public:
 
 	// The open function checks to see if this object has the target mesh in the array and uses the
 	// translator floats to set a new world location. Uses a bool to decide whether to open or close
-	void Open(float DeltaTime);
+	void Open();
+
 
 	// The hide function is called at the end of the open function if the boolean "CanHide" is set to true
 	// it detaches the camera from the player and moves it to the CameraLocation vector which is set for each 
-	// instance to make it accurate as desired @param New location for the camera
-	void Hide(FVector NewLocation);
+	// instance to make it accurate as desired @param New location for the camera, @param New rotation for the camera
+	void Hide(FVector NewLocation, FRotator NewRotation);
 
+	//Accessor for the InUse boolean
 	bool GetInUse();
 	
+	// A boolean that is set when the object is currently open/hidden inside
 	UPROPERTY(BlueprintReadOnly)
 	bool InUse;
 
+	//The escape function used for exiting the location, sets camera transformations to where they were and enables 
+	//controls again
 	void Escape();
 protected:
 	// Called when the game starts
@@ -79,9 +85,13 @@ private:
 	UPROPERTY(EditAnywhere)
 	FString TypeOfObject;
 
-	// An instance editable variable that is set as the desired location to move the camera too
+	// An instance editable variable that is set as the desired location to move the camera to
 	UPROPERTY(EDITANYWHERE)
 	FVector CameraLocation;
+
+	// An instance editable variable that is set as the desired rotation of the camera when hidden
+	UPROPERTY(EDITANYWHERE)
+	FRotator CameraRotation;
 
 	// A boolean to set whether or not this object can be hidden inside or not
 	UPROPERTY(EditAnywhere)
@@ -97,17 +107,19 @@ private:
 	UPROPERTY(EditAnywhere)
 	float TranslatorZ;
 
-	// A boolean that is set when the object is currently open/hidden inside
-	
-
 	// Camera pointer to be assigned to the player camera on startup
 	UCameraComponent* Camera;
 	
+	//A rotator used to store the camera rotation when the player hides in an object
 	FRotator StorePlayerRotation;
 
+	//A rotator used to store the camera location when the player hides in an object
 	FVector StorePlayerLocation;
 
-	APlayerController* PlayerController;
+	//A pointer to the player controller blueprint, used for enabling and disabling input for hiding
+	APlayerController* PlayerControls;
 
-	AHiddenPlayerController* HiddenController;
+	// Timerhandle is used when making a timer, is used when hiding
+	FTimerHandle TimerHandler;
+
 };

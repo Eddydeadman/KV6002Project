@@ -1,7 +1,8 @@
 // Author - Nathan Jackson Student Number:16012679
 
-#include "HideFunction.h"
+
 #include "Grabber.h"
+#include "HideFunction.h"
 
 #define OUT
 
@@ -60,7 +61,7 @@ void UGrabber::Check()
 	}
 	if(Hider)
 	{
-		Hider->Open(FrameTime);
+		Hider->Open();
 	}
 }
 

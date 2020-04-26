@@ -17,6 +17,7 @@ void UHideFunction::BeginPlay()
 {
 	Super::BeginPlay();
 	ActorThatOpens = GetWorld()->GetFirstPlayerController()->GetPawn();
+	PlayerControls = GetWorld()->GetFirstPlayerController();
 	InitialiseObject();
 	Camera = ActorThatOpens->FindComponentByClass<UCameraComponent>();
 	
@@ -40,7 +41,7 @@ void UHideFunction::InitialiseObject()
 
 // The open function checks to see if this object has the target mesh in the array and uses the
 	// translator floats to set a new world location. Uses a bool to decide whether to open or close
-void UHideFunction::Open(float DeltaTime)
+void UHideFunction::Open()
 {
 	if(MeshTarget&&ListOfMeshes[0])
 	{
@@ -62,7 +63,7 @@ void UHideFunction::Open(float DeltaTime)
 					InUse = true;
 					if(CanHide)
 					{
-						Hide(CameraLocation);
+						Hide(CameraLocation, CameraRotation);
 					}
 					return;
 				}
@@ -85,37 +86,35 @@ void UHideFunction::Open(float DeltaTime)
 	// The hide function is called at the end of the open function if the boolean "CanHide" is set to true
 	// it detaches the camera from the player and moves it to the CameraLocation vector which is set for each 
 	// instance to make it accurate as desired
-void UHideFunction::Hide(FVector NewLocation)
+void UHideFunction::Hide(FVector NewLocation, FRotator NewRotation)
 {
 	if(InUse == true)
 	{
-		StorePlayerRotation = Camera->GetRelativeRotation();
-		StorePlayerLocation = Camera->GetRelativeLocation();
+		StorePlayerLocation = Camera->GetComponentLocation();
+		StorePlayerRotation = Camera->GetComponentRotation();
+		Camera->SetWorldRotation(NewRotation, false, nullptr, ETeleportType::None);
 		Camera->SetWorldLocation(NewLocation);
 		ActorThatOpens->SetActorHiddenInGame(true);
-		PlayerController = GetWorld()->GetFirstPlayerController();
-		ActorThatOpens->DisableInput(PlayerController);
-
-
+		ActorThatOpens->DisableInput(PlayerControls);
+		GetWorld()->GetTimerManager().SetTimer(TimerHandler, this, &UHideFunction::Escape, 10.0f);
 	}
 }
 
+	//The escape function used for exiting the location, sets camera transformations to where they were and enables 
+	//controls again
 void UHideFunction::Escape()
 {
-	if(InUse == true)
-	{
-		Camera->SetRelativeRotation(StorePlayerRotation);
-		Camera->SetWorldLocation(StorePlayerLocation);
-		ActorThatOpens->SetActorHiddenInGame(false);
-		ActorThatOpens->DisableInput(HiddenController);
-		ActorThatOpens->EnableInput(PlayerController);
-
-
-	}
+	Camera->SetWorldRotation(StorePlayerRotation, false, nullptr, ETeleportType::None);
+	Camera->SetWorldLocation(StorePlayerLocation);
+	ActorThatOpens->SetActorHiddenInGame(false);
+	ActorThatOpens->EnableInput(PlayerControls);
+	ActorThatOpens->ResetOwnedComponents();
 }
 
+	//Accessor for the InUse boolean
 bool UHideFunction::GetInUse()
 {
 	return InUse;
 }
+
 
