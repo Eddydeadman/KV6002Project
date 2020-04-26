@@ -122,4 +122,8 @@ private:
 	// Timerhandle is used when making a timer, is used when hiding
 	FTimerHandle TimerHandler;
 
+	// Boolean used to distinguish objects that need to move and ones that do not
+	UPROPERTY(EditAnywhere)
+	bool IfMovable;
+
 };

@@ -55,12 +55,17 @@ void UHideFunction::Open()
 				InitialLocation = ListOfMeshes[i]->GetRelativeLocation();
 				if(InUse==false)
 				{
+					InUse = true;
+
+					if(IfMovable)
+					{
 					NewX = InitialLocation.X + TranslatorX;
 					NewY = InitialLocation.Y + TranslatorY;
 					NewZ = InitialLocation.Z + TranslatorZ;
 					FVector TargetLocation(NewX, NewY, NewZ);;
 					ListOfMeshes[i]->SetRelativeLocation(TargetLocation);
-					InUse = true;
+					}
+					
 					if(CanHide)
 					{
 						Hide(CameraLocation, CameraRotation);
