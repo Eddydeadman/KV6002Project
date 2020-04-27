@@ -28,7 +28,6 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	TrackSight(DeltaTime);
-	Score = 0;
 }
 
 // Gets the player view point location and rotation and uses the reach to get a start and end point
@@ -72,12 +71,14 @@ void UGrabber::Grab()
 {
 	if(HitActor)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Actor has been hit"));
 		Loot = HitActor->FindComponentByClass<ULoot>();
 	}
 	if(Loot)
 	{
-		Score = Score + Loot->Loot();
+		Loot->Loot();
+		Score++;
+		UE_LOG(LogTemp, Warning, TEXT("Score = %i"), Score);
+
 	}
 	
 }
